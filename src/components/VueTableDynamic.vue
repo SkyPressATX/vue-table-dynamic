@@ -177,6 +177,7 @@ export default {
   },
   props: {
     // 表格相关信息
+    // params.keys: (Array) ['Key', 'Key1']
     // params.data: （二维矩阵）表格数据
     // params.header: (String) 表头类型。 'row': 第一行作为表头； 'column': 第一列作为表头； ''/'none'/other: 无表头。 默认无
     // params.border: (Boolean) 是否带边框。默认不带
@@ -204,9 +205,54 @@ export default {
     params: { type: Object, default: () => { return {} } }
   },
   computed: {
+    /**
+     * Accept array of objects
+     * 
+     * oldFormat: [
+     *   ['Key', 'Key1', 'Key2'],
+     *   ['value', 'value1', 'value2'],
+     *   ['value3', 'value4', 'value5']
+     * ]
+     * 
+     * newFormat: [
+     *   {
+     *     Key: 'value',
+     *     Key1: 'value1',
+     *     Key2: 'value2',
+     *   },
+     *   {
+     *     Key: 'value3',
+     *     Key1: 'value4',
+     *     Key2: 'value5'
+     *   }
+     * ]
+     */
     sourceData () {
-      if (this.params && Array.isArray(this.params.data)) {
-        return this.params.data
+      if( this.params && this.params.data && this.params.keys ) {
+        console.log(this.params.data)
+        let data = this.params.data.map(obj => {
+          console.log('TABLE KEYS', this.params.keys)
+          data = []
+          for(let key of this.params.keys) {
+            if( !obj[key]) {
+              obj[key] = null
+            }
+            data.push(obj[key])
+          }
+          return data
+        }, this)
+        console.log(data)
+        return data
+      }
+      return []
+      // if (this.params && Array.isArray(this.params.data)) {
+      //   return this.params.data
+      // }
+      // return []
+    },
+    sourceKeys () {
+      if( this.params && this.params.keys) {
+        return this.params.keys
       }
       return []
     },
@@ -395,6 +441,22 @@ export default {
     this.activatedSort = {}
   },
   methods: {
+    /**
+     * Convert array of objects to a 2D Matrix
+     * @function sanitizeData
+     * @return Array 2D Matrix array
+     */
+    sanitizeData () {
+      console.log(this.sourceData)
+      let data = this.sourceData.map(obj => {
+        data = []
+        for(let key of this.sourceKeys) {
+          data.push(obj[key])
+        }
+      }, this)
+      console.log(data)
+      return data
+    },
     /**
    * @function 初始化Table数据
    */

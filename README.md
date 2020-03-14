@@ -1,6 +1,6 @@
 # vue-table-dynamic
 
-English | [简体中文](./README.zh-CN.md)
+## This is a fork of [vue-table-dynamic](https://github.com/TheoXiong/vue-table-dynamic) with a few edits to allow for various formats of data
 
 [vue-table-dynamic](https://github.com/TheoXiong/vue-table-dynamic) is a vue component of dynamic table. It's designed to respond to data changes in real time, and oriented to the runtime.    
 
